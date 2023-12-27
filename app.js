@@ -112,7 +112,7 @@ passport.use(new OIDCStrategy({
     isB2C: config.creds.isB2C,
     issuer: config.creds.issuer,
     passReqToCallback: config.creds.passReqToCallback,
-    scope: config.creds.scope,
+    //scope: config.creds.scope,
     loggingLevel: config.creds.loggingLevel,
     nonceLifetime: config.creds.nonceLifetime,
     nonceMaxAmount: config.creds.nonceMaxAmount,
@@ -122,6 +122,7 @@ passport.use(new OIDCStrategy({
   },
   function(iss, sub, profile, accessToken, refreshToken, done) {
     if (!profile.oid) {
+      console.log("Profile is ", profile)
       return done(new Error("No oid found"), null);
     }
     // asynchronous verification, for effect...
@@ -207,7 +208,7 @@ app.get('/login',
     passport.authenticate('azuread-openidconnect', 
       { 
         response: res,                      // required
-        resourceURL: config.resourceURL,    // optional. Provide a value if you want to specify the resource.
+        //resourceURL: config.resourceURL,    // optional. Provide a value if you want to specify the resource.
         customState: 'my_state',            // optional. Provide a value if you want to provide custom state value.
         failureRedirect: '/' 
       }
@@ -263,4 +264,11 @@ app.get('/logout', function(req, res){
 });
 
 app.listen(3000);
+
+
+// https://medium.com/htc-research-engineering-blog/azure-active-directory-step-by-step-integration-with-node-js-e363bf093e21
+// Sample user 
+// Troubleshoot
+// AADSTS700054: response_type 'id_token' is not enabled for the application. 
+// https://learn.microsoft.com/en-us/answers/questions/886555/aadsts700054-response-type-id-token-is-not-enabled
 
